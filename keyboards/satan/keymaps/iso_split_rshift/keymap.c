@@ -19,8 +19,8 @@
 #define SPACEDUAL LT(_SPC, KC_SPACE)
 #define ENTERDUAL CTL_T(KC_ENT)
 // arrow cluster duality bottom right corner
-#define ARRLEFT  ALT_T(KC_LEFT)
-#define ARRDOWN  GUI_T(KC_DOWN)
+#define ARRLEFT  GUI_T(KC_LEFT)
+#define ARRDOWN  KC_DOWN
 #define ARRUP    SFT_T(KC_UP)
 #define ARRRIGHT CTL_T(KC_RIGHT)
 // german brackets
