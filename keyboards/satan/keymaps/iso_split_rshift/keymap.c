@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,   KC_1,    KC_2,    KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,   \
         TABDUAL,  KC_Q,    KC_W,    KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   \
         CAPSDUAL, KC_A,    KC_S,    KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L,    KC_SCLN, KC_QUOT, KC_NUHS, ENTERDUAL, \
-        KC_LSFT,  KC_NUBS, KC_Z,    KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT,  KC_SLSH, ARRUP,   TG(_SFX),      \
+        KC_LSFT,  KC_NUBS, KC_Z,    KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT,  KC_SLSH, ARRUP,   TG(_SFX),  \
         KC_LCTL,  KC_LGUI, KC_LALT,             SPACEDUAL,                       KC_RALT, ARRLEFT, ARRDOWN, ARRRIGHT),
 
     /* Keymap 1: F-and-vim Layer, modified with Space (by holding space)
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   |   |   | < | > |   |M0 |   |   |   |   | Vol+ |   |
      * |-----------------------------------------------------------|
-     * |    |    |    |                        |Alt |Prev|Vol-|Next|
+     * |    |    |    |                        |    |Prev|Vol-|Next|
      * `-----------------------------------------------------------'
      */
     [_SPC] = KEYMAP_ISO_SPLITRSHIFT(
@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   |   |   |   |   |   |AF2|   |   |   |   | PgUp |   |
      * |-----------------------------------------------------------|
-     * |    |    |    |                        |Alt |Pos1|PgDn|End |
+     * |    |    |    |                        |    |Pos1|PgDn|End |
      * `-----------------------------------------------------------'
      */
     [_TAB] = KEYMAP_ISO_SPLITRSHIFT(
@@ -108,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   | L | L | L | L | L | L |   | 0 |   |  /|  Up  |   | All "L"s represent
      * |-----------------------------------------------------------| LED controlling
-     * |Ctrl|Win |Alt |                        |Alt |Left|Down|Right|
+     * |Ctrl|Win |    |                        |    |Left|Down|Right|
      * `-----------------------------------------------------------'
      */
     [_SFX] = KEYMAP_ISO_SPLITRSHIFT(
