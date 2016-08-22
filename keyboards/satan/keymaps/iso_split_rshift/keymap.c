@@ -31,13 +31,18 @@
 #define GER_ANG_L KC_NUBS       // <
 #define GER_ANG_R LSFT(KC_NUBS) // >
 
-// space cadet Alt and win!             // when held,   when tapped
+// space cadet Alt and win!             
 // TODO: shift does not get used in the parens
 // TODO: RALT does not work
-#define SCA_L MT(MOD_LALT,GER_PAR_L)  // LALT         (
-#define SCA_R MT(MOD_RALT,GER_PAR_R)  // LALT         )
-#define SCW_L MT(MOD_LGUI,GER_BRC_L)  // LWIN         [
-#define SCW_R MT(MOD_RGUI,GER_BRC_R)  // RWIN         ]
+#define MACRO_ALT_L 10
+#define MACRO_ALT_R 11
+#define MACRO_WIN_L 12
+#define MACRO_WIN_R 13
+//                                      when held,   when tapped
+#define SCA_L F(MACRO_ALT_L)            // LALT         (
+#define SCA_R F(MACRO_ALT_R)            // RALT         )
+#define SCW_L F(MACRO_WIN_L)            // LWIN         [
+#define SCW_R F(MACRO_WIN_R)            // RWIN         =
 
 // increase readability 
 #define _______ KC_TRNS
@@ -135,6 +140,10 @@ enum function_id {
     RGBLED_DECREASE_SAT,
     RGBLED_INCREASE_VAL,
     RGBLED_DECREASE_VAL,
+    M_ALT_L,
+    M_ALT_R,
+    M_WIN_L,
+    M_WIN_R,
 };
 
 const uint16_t PROGMEM fn_actions[] = {
@@ -147,12 +156,16 @@ const uint16_t PROGMEM fn_actions[] = {
     [7]  = ACTION_FUNCTION(RGBLED_DECREASE_SAT),
     [8]  = ACTION_FUNCTION(RGBLED_INCREASE_VAL),
     [9]  = ACTION_FUNCTION(RGBLED_DECREASE_VAL),
-    [10] = ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ENT),
+    [10] = ACTION_MACRO_TAP(MACRO_ALT_L),
+    [11] = ACTION_MACRO_TAP(MACRO_ALT_R),
+    [12] = ACTION_MACRO_TAP(MACRO_WIN_L),
+    [13] = ACTION_MACRO_TAP(MACRO_WIN_R),
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     // MACRODOWN only works in this function
+    // That's the stuff you trigger with M(0) and M(1)
     switch(id) {
         case 0:
             return (record->event.pressed ? 
@@ -164,11 +177,76 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
                     MACRO( D(LALT), T(F2), U(LALT), END )
                     :MACRO( END ));
             break;
+        case MACRO_ALT_L:   // Shift 8 for german (
+			if (record->event.pressed) {
+				// Activate shift
+				register_mods(MOD_LSFT);
+			} else {
+				// If the action was a tap
+				if (record->tap.count && !record->tap.interrupted) {
+					// Send 8, which is modified by shift as per above
+					register_code(KC_8);
+					unregister_code(KC_8);
+				}
+				// Deactivate shift
+				unregister_mods(MOD_LSFT);
+				record->tap.count = 0;
+			}
+			break;
+        case MACRO_ALT_R:	// Shift 9 for german )
+			if (record->event.pressed) {
+				// Activate shift
+				register_mods(MOD_LSFT);
+			} else {
+				// If the action was a tap
+				if (record->tap.count && !record->tap.interrupted) {
+					// Send 8, which is modified by shift as per above
+					register_code(KC_9);
+					unregister_code(KC_9);
+				}
+				// Deactivate shift
+				unregister_mods(MOD_LSFT);
+				record->tap.count = 0;
+			}
+            break;
+        case MACRO_WIN_L:	// RAlt 7 for german 
+			if (record->event.pressed) {
+				// Activate shift
+				register_mods(MOD_RALT);
+			} else {
+				// If the action was a tap
+				if (record->tap.count && !record->tap.interrupted) {
+					// Send 8, which is modified by shift as per above
+					register_code(KC_7);
+					unregister_code(KC_7);
+				}
+				// Deactivate shift
+				unregister_mods(MOD_RALT);
+				record->tap.count = 0;
+			}
+            break;
+        case MACRO_WIN_R:	// RAlt 0 for german
+			if (record->event.pressed) {
+				// Activate shift
+				register_mods(MOD_RALT);
+			} else {
+				// If the action was a tap
+				if (record->tap.count && !record->tap.interrupted) {
+					// Send 8, which is modified by shift as per above
+					register_code(KC_0);
+					unregister_code(KC_0);
+				}
+				// Deactivate shift
+				unregister_mods(MOD_RALT);
+				record->tap.count = 0;
+			}
+            break;
     }
     return MACRO_NONE;
 };
 
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
+    // That's the stuff you trigger with ACTION_FUNCTION(xy)
     switch (id) {
         case RGBLED_TOGGLE:
             //led operations
