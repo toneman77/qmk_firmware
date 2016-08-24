@@ -33,6 +33,10 @@ enum {
 enum {
     LAUNCH = 0,
     LAUNCH2,
+    L_SCALT_L,
+    L_SCALT_R,
+    L_SCWIN_L,
+    L_SCWIN_R,
 };
 
 // dual-role shortcuts
@@ -40,11 +44,13 @@ enum {
 #define CAPSDUAL  CTL_T(KC_ESC)
 #define SPACEDUAL LT(_SPC, KC_SPACE)
 #define ENTERDUAL CTL_T(KC_ENT)
+
 // arrow cluster duality bottom right corner
 #define ARRLEFT  GUI_T(KC_LEFT)
 #define ARRDOWN  KC_DOWN
 #define ARRUP    SFT_T(KC_UP)
 #define ARRRIGHT CTL_T(KC_RIGHT)
+
 // german brackets
 #define GER_CUR_L RALT(KC_7)    // [
 #define GER_CUR_R RALT(KC_0)    // ]
@@ -54,6 +60,15 @@ enum {
 #define GER_ANG_R LSFT(KC_NUBS) // >
 #define GER_BRC_L RALT(KC_8)    // [
 #define GER_BRC_R RALT(KC_9)    // ]
+
+// space cadet win and alt!
+#define SCA_L   M(L_SCALT_L)
+#define SCA_R   M(L_SCALT_R)
+#define SCW_L   M(L_SCWIN_L)
+#define SCW_R   M(L_SCWIN_R)
+// helpers
+#define TAPPING_TERM 200
+static uint16_t tap_timer;
 
 // increase readability 
 #define _______ KC_TRNS
@@ -78,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TABDUAL,  KC_Q,    KC_W,    KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   \
         CAPSDUAL, KC_A,    KC_S,    KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L,    KC_SCLN, KC_QUOT, KC_NUHS, ENTERDUAL, \
         KC_LSFT,  KC_NUBS, KC_Z,    KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT,  KC_SLSH, ARRUP,   TG(_SFX),  \
-        KC_LCTL,  KC_LGUI, KC_LALT,             SPACEDUAL,                       KC_RALT, ARRLEFT, ARRDOWN, ARRRIGHT),
+        KC_LCTL,  SCW_L,   SCA_L,               SPACEDUAL,                       SCA_R,   SCW_R,   ARRDOWN, ARRRIGHT),
 
     /* Keymap 1: F-and-vim Layer, modified with Space (by holding space)
      * ,-----------------------------------------------------------.
@@ -166,6 +181,86 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
             return (record->event.pressed ? 
                     MACRO( D(LALT), T(F2), U(LALT), END )
                     :MACRO( END ));
+            break;
+        case L_SCALT_L:
+            // ( is shift 8
+            {
+                int MY_MOD=KC_LALT;
+                int MY_NEWMOD=KC_LSFT;
+                int MY_KEY=KC_8;
+                if (record->event.pressed) {
+                    tap_timer = timer_read();
+                    register_code (MY_MOD);
+                } else {
+                    if (timer_elapsed (tap_timer) < TAPPING_TERM) {
+                        unregister_code (MY_MOD);
+                        register_code (MY_NEWMOD);
+                        register_code (MY_KEY);
+                        unregister_code (MY_KEY);
+                        unregister_code (MY_NEWMOD);
+                    }
+                }
+            }
+            break;
+        case L_SCALT_R:
+            // ) is shift 9
+            {
+                int MY_MOD=KC_RALT;
+                int MY_NEWMOD=KC_RSFT;
+                int MY_KEY=KC_9;
+                if (record->event.pressed) {
+                    tap_timer = timer_read();
+                    register_code (MY_MOD);
+                } else {
+                    if (timer_elapsed (tap_timer) < TAPPING_TERM) {
+                        unregister_code (MY_MOD);
+                        register_code (MY_NEWMOD);
+                        register_code (MY_KEY);
+                        unregister_code (MY_KEY);
+                        unregister_code (MY_NEWMOD);
+                    }
+                }
+            }
+            break;
+        case L_SCWIN_L:
+            // { is ralt 7
+            {
+                int MY_MOD=KC_LGUI;
+                int MY_NEWMOD=KC_RALT;
+                int MY_KEY=KC_7;
+                if (record->event.pressed) {
+                    tap_timer = timer_read();
+                    register_code (MY_MOD);
+                } else {
+                    if (timer_elapsed (tap_timer) < TAPPING_TERM) {
+                        unregister_code (MY_MOD);
+                        register_code (MY_NEWMOD);
+                        register_code (MY_KEY);
+                        unregister_code (MY_KEY);
+                        unregister_code (MY_NEWMOD);
+                    }
+                }
+            }
+            break;
+        case L_SCWIN_R:
+            // } is shift 8
+            {
+                int MY_MOD=KC_RGUI;
+                int MY_NEWMOD=KC_RALT;
+                int MY_KEY=KC_0;
+                if (record->event.pressed) {
+                    tap_timer = timer_read();
+                    register_code (MY_MOD);
+                } else {
+                    if (timer_elapsed (tap_timer) < TAPPING_TERM) {
+                        unregister_code (MY_MOD);
+                        register_code (MY_NEWMOD);
+                        register_code (MY_KEY);
+                        unregister_code (MY_KEY);
+                        unregister_code (MY_NEWMOD);
+                    }
+                }
+            }
             break;
     }
     return MACRO_NONE;
