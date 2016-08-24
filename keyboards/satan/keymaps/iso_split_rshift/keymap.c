@@ -17,7 +17,7 @@ enum {
     _SFX, 
 };
 
-// functions
+// LED helpers
 enum {
     RGBLED_TOGGLE = 0,
     RGBLED_STEP_MODE,
@@ -29,7 +29,7 @@ enum {
     RGBLED_DECREASE_VAL,
 };
 
-// Macro
+// Launcher helpers
 enum {
     LAUNCH = 0,
     LAUNCH2,
