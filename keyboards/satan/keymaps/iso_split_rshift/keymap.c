@@ -8,10 +8,32 @@
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _DEF 0
-#define _SPC 1
-#define _TAB 2
-#define _SFX 3
+
+// layers
+enum {
+    _DEF = 0,
+    _SPC, 
+    _TAB, 
+    _SFX, 
+};
+
+// LED helpers
+enum {
+    RGBLED_TOGGLE = 0,
+    RGBLED_STEP_MODE,
+    RGBLED_INCREASE_HUE,
+    RGBLED_DECREASE_HUE,
+    RGBLED_INCREASE_SAT,
+    RGBLED_DECREASE_SAT,
+    RGBLED_INCREASE_VAL,
+    RGBLED_DECREASE_VAL,
+};
+
+// Launcher helpers
+enum {
+    LAUNCH = 0,
+    LAUNCH2,
+};
 
 // dual-role shortcuts
 #define TABDUAL   LT(_TAB, KC_TAB)
@@ -19,8 +41,8 @@
 #define SPACEDUAL LT(_SPC, KC_SPACE)
 #define ENTERDUAL CTL_T(KC_ENT)
 // arrow cluster duality bottom right corner
-#define ARRLEFT  ALT_T(KC_LEFT)
-#define ARRDOWN  GUI_T(KC_DOWN)
+#define ARRLEFT  GUI_T(KC_LEFT)
+#define ARRDOWN  KC_DOWN
 #define ARRUP    SFT_T(KC_UP)
 #define ARRRIGHT CTL_T(KC_RIGHT)
 // german brackets
@@ -55,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,   KC_1,    KC_2,    KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,   \
         TABDUAL,  KC_Q,    KC_W,    KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   \
         CAPSDUAL, KC_A,    KC_S,    KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L,    KC_SCLN, KC_QUOT, KC_NUHS, ENTERDUAL, \
-        KC_LSFT,  KC_NUBS, KC_Z,    KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT,  KC_SLSH, ARRUP,   TG(_SFX),      \
+        KC_LSFT,  KC_NUBS, KC_Z,    KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT,  KC_SLSH, ARRUP,   TG(_SFX),  \
         KC_LCTL,  KC_LGUI, KC_LALT,             SPACEDUAL,                       KC_RALT, ARRLEFT, ARRDOWN, ARRRIGHT),
 
     /* Keymap 1: F-and-vim Layer, modified with Space (by holding space)
@@ -68,14 +90,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   |   |   | < | > |   |M0 |   |   |   |   | Vol+ |   |
      * |-----------------------------------------------------------|
-     * |    |    |    |                        |Alt |Prev|Vol-|Next|
+     * |    |    |    |                        |    |Prev|Vol-|Next|
      * `-----------------------------------------------------------'
      */
     [_SPC] = KEYMAP_ISO_SPLITRSHIFT(
         KC_PSCR, KC_F1,   KC_F2,   KC_F3,     KC_F4,     KC_F5,     KC_F6,    KC_F7,     KC_F8,     KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  \
         _______, KC_PAUS, KC_UP,   GER_BRC_L, GER_BRC_R, _______,   _______,  GER_PAR_L, GER_PAR_R, _______, _______, _______, _______, _______, \
         _______, KC_LEFT, KC_DOWN, KC_RIGHT,  _______,   _______,   KC_LEFT,  KC_DOWN,   KC_UP,     KC_RGHT, _______, _______, _______, KC_MPLY, \
-        _______, _______, _______, _______,   GER_ANG_L, GER_ANG_R, KC_SPACE, M(0),      _______,   _______, _______, _______, KC_VOLU, _______, \
+        _______, _______, _______, _______,   GER_ANG_L, GER_ANG_R, KC_SPACE, M(LAUNCH), _______,   _______, _______, _______, KC_VOLU, _______, \
         _______, _______, _______,                                  _______,                                 _______, KC_MPRV, KC_VOLD, KC_MNXT),
 
     /* Keymap 2: Tab Layer w/ vim pageup, modified with Tab (by holding tab)
@@ -88,14 +110,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   |   |   |   |   |   |AF2|   |   |   |   | PgUp |   |
      * |-----------------------------------------------------------|
-     * |    |    |    |                        |Alt |Pos1|PgDn|End |
+     * |    |    |    |                        |    |Pos1|PgDn|End |
      * `-----------------------------------------------------------'
      */
     [_TAB] = KEYMAP_ISO_SPLITRSHIFT(
         KC_WAKE, _______, _______, _______, _______, _______, _______, _______,    _______,  _______, _______, _______, _______, KC_INS,  \
-        _______, _______, _______, _______, _______, _______, _______, GER_CUR_L, GER_CUR_R, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, GER_CUR_L,  GER_CUR_R, _______, _______, _______, _______, _______, \
         _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN,    KC_PGUP,  KC_END,  _______, _______, _______, KC_ENT,  \
-        _______, _______, _______, _______, _______, _______, _______, M(1),       _______,  _______, _______, _______, KC_PGUP, _______, \
+        _______, _______, _______, _______, _______, _______, _______, M(LAUNCH2), _______,  _______, _______, _______, KC_PGUP, _______, \
         _______, _______, _______,                            _______,                                _______, KC_HOME, KC_PGDN, KC_END),
 
     /* Keymap 3: Split right shift Numpad toggle Layer (by tapping the split rshift key)
@@ -108,52 +130,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |    |   | L | L | L | L | L | L |   | 0 |   |  /|  Up  |   | All "L"s represent
      * |-----------------------------------------------------------| LED controlling
-     * |Ctrl|Win |Alt |                        |Alt |Left|Down|Right|
+     * |Ctrl|Win |    |                        |    |Left|Down|Right|
      * `-----------------------------------------------------------'
      */
     [_SFX] = KEYMAP_ISO_SPLITRSHIFT(
         RESET,   _______, _______, _______, _______, _______, _______, KC_7,    KC_8,    KC_9, _______, _______, _______, KC_BSPC, \
         _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5,    KC_6, _______, _______, _______, KC_BSLS, \
-        _______, F(2),    F(3),    _______, _______, _______, _______, KC_1,    KC_2,    KC_3, _______, _______, XXXXXXX, KC_ENT,  \
-        _______, F(4),    F(5),    F(6),    F(7),    F(8),    F(9),    _______, _______, KC_0, _______, KC_SLSH, KC_UP,   _______, \
+        _______, F(0),    F(1),    _______, _______, _______, _______, KC_1,    KC_2,    KC_3, _______, _______, XXXXXXX, KC_ENT,  \
+        _______, F(2),    F(3),    F(4),    F(5),    F(6),    F(7),    _______, _______, KC_0, _______, KC_SLSH, KC_UP,   _______, \
         _______, _______, _______,                            _______,                         _______, KC_LEFT, KC_DOWN, KC_RGHT),
 };
 
-enum function_id {
-    LAUNCH,
-    RGBLED_TOGGLE,
-    RGBLED_STEP_MODE,
-    RGBLED_INCREASE_HUE,
-    RGBLED_DECREASE_HUE,
-    RGBLED_INCREASE_SAT,
-    RGBLED_DECREASE_SAT,
-    RGBLED_INCREASE_VAL,
-    RGBLED_DECREASE_VAL,
-};
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1]  = ACTION_FUNCTION(LAUNCH),
-    [2]  = ACTION_FUNCTION(RGBLED_TOGGLE),
-    [3]  = ACTION_FUNCTION(RGBLED_STEP_MODE),
-    [4]  = ACTION_FUNCTION(RGBLED_INCREASE_HUE),
-    [5]  = ACTION_FUNCTION(RGBLED_DECREASE_HUE),
-    [6]  = ACTION_FUNCTION(RGBLED_INCREASE_SAT),
-    [7]  = ACTION_FUNCTION(RGBLED_DECREASE_SAT),
-    [8]  = ACTION_FUNCTION(RGBLED_INCREASE_VAL),
-    [9]  = ACTION_FUNCTION(RGBLED_DECREASE_VAL),
-    [10] = ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ENT),
+    [RGBLED_TOGGLE]       = ACTION_FUNCTION(RGBLED_TOGGLE),
+    [RGBLED_STEP_MODE]    = ACTION_FUNCTION(RGBLED_STEP_MODE),
+    [RGBLED_INCREASE_HUE] = ACTION_FUNCTION(RGBLED_INCREASE_HUE),
+    [RGBLED_DECREASE_HUE] = ACTION_FUNCTION(RGBLED_DECREASE_HUE),
+    [RGBLED_INCREASE_SAT] = ACTION_FUNCTION(RGBLED_INCREASE_SAT),
+    [RGBLED_DECREASE_SAT] = ACTION_FUNCTION(RGBLED_DECREASE_SAT),
+    [RGBLED_INCREASE_VAL] = ACTION_FUNCTION(RGBLED_INCREASE_VAL),
+    [RGBLED_DECREASE_VAL] = ACTION_FUNCTION(RGBLED_DECREASE_VAL),
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     // MACRODOWN only works in this function
     switch(id) {
-        case 0:
+        case LAUNCH:
             return (record->event.pressed ? 
                     MACRO( D(RALT), T(SPC), U(RALT), END )
                     :MACRO( END ));
             break;
-        case 1:
+        case LAUNCH2:
             return (record->event.pressed ? 
                     MACRO( D(LALT), T(F2), U(LALT), END )
                     :MACRO( END ));
