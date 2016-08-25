@@ -52,8 +52,8 @@ enum {
 #define ARRRIGHT CTL_T(KC_RIGHT)
 
 // german brackets
-#define GER_CUR_L RALT(KC_7)    // [
-#define GER_CUR_R RALT(KC_0)    // ]
+#define GER_CUR_L RALT(KC_7)    // {
+#define GER_CUR_R RALT(KC_0)    // }
 #define GER_PAR_L LSFT(KC_8)    // (
 #define GER_PAR_R LSFT(KC_9)    // )
 #define GER_ANG_L KC_NUBS       // <
@@ -62,12 +62,12 @@ enum {
 #define GER_BRC_R RALT(KC_9)    // ]
 
 // space cadet win and alt!
-#define SCA_L   M(L_SCALT_L)
-#define SCA_R   M(L_SCALT_R)
-#define SCW_L   M(L_SCWIN_L)
-#define SCW_R   M(L_SCWIN_R)
+#define SCA_L   M(L_SCALT_L)    // (
+#define SCA_R   M(L_SCALT_R)    // )
+#define SCW_L   M(L_SCWIN_L)    // {
+#define SCW_R   M(L_SCWIN_R)    // }
 // helpers
-#define TAPPING_TERM 200
+#define TAPPING_TERM 100
 static uint16_t tap_timer;
 
 // increase readability 
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ,-----------------------------------------------------------.
      * |Grv|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|Backsp |
      * |-----------------------------------------------------------|
-     * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|   \ | Tab is Fn1
+     * |Tab  |  Q|  W|  E|  R|  1|  Y|  U|  I|  O|  P|  [|  ]|   \ | Tab is Fn1
      * |-----------------------------------------------------------|
      * |Ctrl   | A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '| Return |
      * |-----------------------------------------------------------|
@@ -109,11 +109,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------'
      */
     [_SPC] = KEYMAP_ISO_SPLITRSHIFT(
-        KC_PSCR, KC_F1,   KC_F2,   KC_F3,     KC_F4,     KC_F5,     KC_F6,    KC_F7,     KC_F8,     KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  \
-        _______, KC_PAUS, KC_UP,   GER_BRC_L, GER_BRC_R, _______,   _______,  GER_PAR_L, GER_PAR_R, _______, _______, _______, _______, _______, \
-        _______, KC_LEFT, KC_DOWN, KC_RIGHT,  _______,   _______,   KC_LEFT,  KC_DOWN,   KC_UP,     KC_RGHT, _______, _______, _______, KC_MPLY, \
-        _______, _______, _______, _______,   GER_ANG_L, GER_ANG_R, KC_SPACE, M(LAUNCH), _______,   _______, _______, _______, KC_VOLU, _______, \
-        _______, _______, _______,                                  _______,                                 _______, KC_MPRV, KC_VOLD, KC_MNXT),
+        KC_PSCR, KC_F1,   KC_F2,   KC_F3,    KC_F4,   KC_F5,   KC_F6,    KC_F7,     KC_F8,   KC_F9,   KC_F10,    KC_F11,    KC_F12,  KC_DEL,   \
+        _______, KC_PAUS, KC_UP,   _______,  _______, _______, _______,  _______,   _______, _______, _______,   _______,   _______, _______,  \
+        _______, KC_LEFT, KC_DOWN, KC_RIGHT, _______, _______, KC_LEFT,  KC_DOWN,   KC_UP,   KC_RGHT, _______,   _______,   _______, KC_MPLY,  \
+        _______, _______, _______, _______,  _______, _______, KC_SPACE, M(LAUNCH), _______, _______, _______,   _______,   KC_VOLU, _______,  \
+        _______, GER_ANG_L, GER_BRC_L,                                  _______,                      GER_BRC_R, GER_ANG_R, KC_VOLD, KC_MNXT),
 
     /* Keymap 2: Tab Layer w/ vim pageup, modified with Tab (by holding tab)
      * ,-----------------------------------------------------------.
@@ -129,11 +129,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------'
      */
     [_TAB] = KEYMAP_ISO_SPLITRSHIFT(
-        KC_WAKE, _______, _______, _______, _______, _______, _______, _______,    _______,  _______, _______, _______, _______, KC_INS,  \
-        _______, _______, _______, _______, _______, _______, _______, GER_CUR_L,  GER_CUR_R, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN,    KC_PGUP,  KC_END,  _______, _______, _______, KC_ENT,  \
-        _______, _______, _______, _______, _______, _______, _______, M(LAUNCH2), _______,  _______, _______, _______, KC_PGUP, _______, \
-        _______, _______, _______,                            _______,                                _______, KC_HOME, KC_PGDN, KC_END),
+        KC_WAKE, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______, KC_INS,  \
+        _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN,    KC_PGUP, KC_END,  _______, _______, _______, KC_ENT,  \
+        _______, _______, _______, _______, _______, _______, _______, M(LAUNCH2), _______, _______, _______, _______, KC_PGUP, _______, \
+        _______, _______, _______,                            _______,                               _______, KC_HOME, KC_PGDN, KC_END),
 
     /* Keymap 3: Split right shift Numpad toggle Layer (by tapping the split rshift key)
      * ,-----------------------------------------------------------.
