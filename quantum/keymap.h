@@ -1,5 +1,5 @@
 /*
-Copyright 2012-2016 Jun Wako <wakojun@gmail.com>
+Copyright 2012,2013 Jun Wako <wakojun@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -48,6 +48,5 @@ uint16_t keymap_function_id_to_action( uint16_t function_id );
 
 extern const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS];
 extern const uint16_t fn_actions[];
-
 
 #endif
