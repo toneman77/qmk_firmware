@@ -60,6 +60,12 @@ void raw_hid_receive( uint8_t *data, uint8_t length )
 			backlight_set_key_color(msg->row, msg->column, msg->hsv);
 			break;
 		}
+		case id_system_get_state:
+		{
+			msg_system_state *msg = (msg_system_state*)&data[1];
+			msg->value = backlight_get_tick();
+			break;
+		}
 		default:
 		{
 			// Unhandled message.
@@ -107,7 +113,6 @@ void matrix_init_kb(void)
 {
 	bootmagic_lite();
 
-#ifndef ZEAL60_TEST
 	// If the EEPROM has the magic, the data is good.
 	// OK to load from EEPROM.
 	if (eeprom_is_valid())
@@ -130,7 +135,7 @@ void matrix_init_kb(void)
 			for ( int column=0; column < MATRIX_COLS; column++ )
 			{
 				hsv.h = rand() & 0xFF;
-				hsv.s = rand() & 0xFF;
+				hsv.s = rand() & 0x7F;
 				hsv.v = 255;
 				backlight_set_key_color( row, column, hsv );
 			}
@@ -143,7 +148,6 @@ void matrix_init_kb(void)
 		// Save the magic number last, in case saving was interrupted
 		eeprom_set_valid(true);
 	}
-#endif
 
 	// Initialize LED drivers for backlight.
 	backlight_init_drivers();
@@ -158,7 +162,6 @@ void matrix_scan_kb(void)
 {
 	// This only updates the LED driver buffers if something has changed.
 	backlight_update_pwm_buffers();
-
 	matrix_scan_user();
 }
 
@@ -370,20 +373,8 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 void led_set_kb(uint8_t usb_led)
 {
-	if (usb_led & (1<<USB_LED_CAPS_LOCK))
-	{
-		// Output high.
-		DDRE |= (1<<6);
-		PORTE |= (1<<6);
-	}
-	else
-	{
-		// Output low.
-		DDRE &= ~(1<<6);
-		PORTE &= ~(1<<6);
-	}
-	
-	led_set_user(usb_led);
+	backlight_set_indicator_state(usb_led);
+	//backlight_debug_led(usb_led & (1<<USB_LED_CAPS_LOCK));
 }
 
 void suspend_power_down_kb(void)

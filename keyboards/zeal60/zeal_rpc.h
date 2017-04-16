@@ -3,7 +3,7 @@
 
 #include "zeal_color.h"
 
-#define PROTOCOL_VERSION 0x0002
+#define PROTOCOL_VERSION 0x0004
 
 enum
 {
@@ -14,7 +14,8 @@ enum
 	id_backlight_config_set_values,
 	id_backlight_config_set_alphas_mods,
 	id_backlight_set_key_color,
-
+	id_system_get_state,
+	id_system_set_state,
 	id_unhandled = 0xFF,
 };
 
@@ -58,6 +59,23 @@ typedef struct PACKED
 	bool use_iso_enter:1;
 	bool disable_when_usb_suspended:1;
 	uint8_t disable_after_timeout;
+	uint8_t brightness;
+	uint8_t effect;
+	HSV color_1;
+	HSV color_2;
+	HSV caps_lock_indicator_color;
+	uint8_t caps_lock_indicator_row;
+	uint8_t caps_lock_indicator_column;
+	HSV layer_1_indicator_color;
+	uint8_t layer_1_indicator_row;
+	uint8_t layer_1_indicator_column;
+	HSV layer_2_indicator_color;
+	uint8_t layer_2_indicator_row;
+	uint8_t layer_2_indicator_column;
+	HSV layer_3_indicator_color;
+	uint8_t layer_3_indicator_row;
+	uint8_t layer_3_indicator_column;
+	// This is close to the packet size limit of 32
 } msg_backlight_config_set_values;
 
 typedef struct PACKED
@@ -71,6 +89,12 @@ typedef struct PACKED
 	uint8_t column;
 	HSV hsv;
 } msg_backlight_set_key_color;
+
+typedef struct PACKED
+{
+	uint8_t id;
+	uint32_t value;
+} msg_system_state;
 
 #if defined(_MSC_VER)
 #pragma pack( pop )

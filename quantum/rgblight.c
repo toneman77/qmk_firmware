@@ -63,6 +63,13 @@ const float BRIGHTNESS_CORRECTION_TABLE[] PROGMEM = {
     1.0, 1.0, 1.0, 1.0
 };
 
+const float BRIGHTNESS_CORRECTION_TABLE[] PROGMEM = {
+    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+    1.0, 1.0, 1.0, 1.0,
+    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+    1.0, 1.0, 1.0, 1.0
+};
+
 __attribute__ ((weak))
 const uint8_t RGBLED_BREATHING_INTERVALS[] PROGMEM = {30, 20, 10, 5};
 __attribute__ ((weak))
@@ -432,14 +439,15 @@ void adjust_current(void) {
     }
 }
 
+__attribute__ ((weak))
 void rgblight_set(void) {
+    
+  #if defined(RGBSTRIP_CURRENT_LIMIT) && defined(RGBSTRIP_MAX_CURRENT_PER_LIGHT)
+    adjust_current();
+  #endif
 
   #ifdef LED_BRIGHTNESS_CORRECTION
     correct_brightness();
-  #endif
-
-  #if defined(RGBSTRIP_CURRENT_LIMIT) && defined(RGBSTRIP_MAX_CURRENT_PER_LIGHT)
-    adjust_current();
   #endif
 
   if (rgblight_config.enable) {
