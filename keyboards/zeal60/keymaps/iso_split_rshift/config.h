@@ -40,4 +40,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef USE_ISO_ENTER
 #define USE_ISO_ENTER 1
 
+/*
+ * Feature disable options
+ *  These options are also useful to firmware size reduction.
+ */
+
+// disable backlight when USB suspended (PC sleep/hibernate/shutdown)
+#undef BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED 
+#define BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED 1
+
+// disable backlight after timeout in minutes, 0 = no timeout
+#undef BACKLIGHT_DISABLE_AFTER_TIMEOUT
+#define BACKLIGHT_DISABLE_AFTER_TIMEOUT 1
+
+// disable debug print
+#undef NO_DEBUG
+#define NO_DEBUG
+
+// disable print
+//#define NO_PRINT
+
+// disable action features
+//#define NO_ACTION_LAYER
+//#define NO_ACTION_TAPPING
+//#define NO_ACTION_ONESHOT
+//#define NO_ACTION_MACRO
+//#define NO_ACTION_FUNCTION
 #endif
