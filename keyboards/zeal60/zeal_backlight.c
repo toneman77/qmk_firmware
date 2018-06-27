@@ -657,7 +657,6 @@ void backlight_effect_cycle_up_down_heat(void)
     }
 }
 
-
 void backlight_effect_custom(void)
 {
 	HSV hsv;
@@ -799,7 +798,8 @@ ISR(TIMER3_COMPA_vect)
 			backlight_effect_all_off();
 			break;
 		case 1:
-			backlight_effect_solid_color();
+			//backlight_effect_solid_color();
+			backlight_effect_cycle_up_down_heat();
 			break;
 		case 2:
 			backlight_effect_alphas_mods();
@@ -820,8 +820,7 @@ ISR(TIMER3_COMPA_vect)
 			backlight_effect_cycle_up_down();
 			break;
 		case 8:
-			//backlight_effect_jellybean_raindrops( initialize );
-			backlight_effect_cycle_up_down_heat();
+			backlight_effect_jellybean_raindrops( initialize );
 			break;
 		case 9:
 			backlight_effect_cycle_radial1();
