@@ -19,6 +19,9 @@
     #include "audio.h"
 #endif /* AUDIO_ENABLE */
 
+#ifdef RGBLIGHT_SLEEP
+  #include "rgblight.h"
+#endif
 
 
 #define wdt_intr_enable(value)   \
@@ -38,6 +41,10 @@ __asm__ __volatile__ (  \
 )
 
 
+/** \brief Suspend idle
+ *
+ * FIXME: needs doc
+ */
 void suspend_idle(uint8_t time)
 {
     cli();
@@ -49,7 +56,8 @@ void suspend_idle(uint8_t time)
 }
 
 #ifndef NO_SUSPEND_POWER_DOWN
-/* Power down MCU with watchdog timer
+/** \brief Power down MCU with watchdog timer
+ *
  * wdto: watchdog timer timeout defined in <avr/wdt.h>
  *          WDTO_15MS
  *          WDTO_30MS
@@ -64,6 +72,25 @@ void suspend_idle(uint8_t time)
  */
 static uint8_t wdt_timeout = 0;
 
+/** \brief Run keyboard level Power down
+ *
+ * FIXME: needs doc
+ */
+__attribute__ ((weak))
+void suspend_power_down_user (void) { }
+/** \brief Run keyboard level Power down
+ *
+ * FIXME: needs doc
+ */
+__attribute__ ((weak))
+void suspend_power_down_kb(void) {
+  suspend_power_down_user();
+}
+
+/** \brief Power down
+ *
+ * FIXME: needs doc
+ */
 static void power_down(uint8_t wdto)
 {
 #ifdef PROTOCOL_LUFA
@@ -85,6 +112,13 @@ static void power_down(uint8_t wdto)
         // This sometimes disables the start-up noise, so it's been disabled
 		// stop_all_notes();
 	#endif /* AUDIO_ENABLE */
+#ifdef RGBLIGHT_SLEEP
+#ifdef RGBLIGHT_ANIMATIONS
+  rgblight_timer_disable();
+#endif
+  rgblight_disable_noeeprom();
+#endif
+  suspend_power_down_kb();
 
     // TODO: more power saving
     // See PicoPower application note
@@ -103,12 +137,12 @@ static void power_down(uint8_t wdto)
 }
 #endif
 
-__attribute__ ((weak)) void suspend_power_down_kb(void) {}
-
+/** \brief Suspend power down
+ *
+ * FIXME: needs doc
+ */
 void suspend_power_down(void)
 {
-	suspend_power_down_kb();
-
 #ifndef NO_SUSPEND_POWER_DOWN
     power_down(WDTO_15MS);
 #endif
@@ -127,19 +161,40 @@ bool suspend_wakeup_condition(void)
      return false;
 }
 
-__attribute__ ((weak)) void suspend_wakeup_init_kb(void) {}
+/** \brief run user level code immediately after wakeup
+ *
+ * FIXME: needs doc
+ */
+__attribute__ ((weak))
+void suspend_wakeup_init_user(void) { }
 
-// run immediately after wakeup
+/** \brief run keyboard level code immediately after wakeup
+ *
+ * FIXME: needs doc
+ */
+__attribute__ ((weak))
+void suspend_wakeup_init_kb(void) {
+  suspend_wakeup_init_user();
+}
+/** \brief run immediately after wakeup
+ *
+ * FIXME: needs doc
+ */
 void suspend_wakeup_init(void)
 {
-	suspend_wakeup_init_kb();
-
     // clear keyboard state
     clear_keyboard();
 #ifdef BACKLIGHT_ENABLE
     backlight_init();
 #endif
 	led_set(host_keyboard_leds());
+#ifdef RGBLIGHT_SLEEP
+  rgblight_enable_noeeprom();
+#ifdef RGBLIGHT_ANIMATIONS
+  rgblight_timer_enable();
+#endif
+#endif
+  suspend_wakeup_init_kb();
 }
 
 #ifndef NO_SUSPEND_POWER_DOWN
